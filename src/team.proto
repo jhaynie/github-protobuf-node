@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package github;
+
+
+
+//options (gogoproto.marshaler_all) = true;
+//options (gogoproto.sizer_all) = true;
+//options (gogoproto.unmarshaler_all) = true;
+//options (gogoproto.goproto_getters_all) = false;
+
+message Team {
+	string name = 1;
+	int32 id = 2;
+	string slug = 3;
+	string description = 4;
+	string permission = 5;
+	string url = 6;
+	string members_url = 7;
+	string repositories_url = 8;
+}

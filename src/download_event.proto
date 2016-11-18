@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// NOTE: this event is deprecated but provided for older timelines
+// https://developer.github.com/v3/activity/events/types/#downloadevent
+
+package github;
+
+
+
+//options (gogoproto.marshaler_all) = true;
+//options (gogoproto.sizer_all) = true;
+//options (gogoproto.unmarshaler_all) = true;
+//options (gogoproto.goproto_getters_all) = false;
+
+message Download {
+	string url = 1;
+	string html_url = 2;
+	int32 id = 3;
+	string name = 4;
+	string description = 5;
+	int32 size = 6 ;//[(gogoproto.customname) = "FileSize"];
+	int32 download_count = 7;
+	string content_type = 8;
+}
+
+message DownloadEvent {
+	Download download = 1;
+}

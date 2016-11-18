@@ -1,0 +1,20 @@
+{
+  "name": "github-protobuf",
+  "version": "1.0.4",
+  "description": "node library for github api events in protobuf format",
+  "author": "Jeff Haynie <jhaynie@gmail.com>",
+  "keywords": [
+	 "github",
+	 "protobuf"
+  ],
+  "licenses": [
+	  {
+		  "type": "MIT",
+		  "url": "http://www.opensource.org/licenses/mit-license.php"
+	  }
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "google-protobuf": "^3.1.1"
+  }
+}

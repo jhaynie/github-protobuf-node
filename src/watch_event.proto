@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+// https://developer.github.com/v3/activity/events/types/#watchevent
+
+package github;
+
+
+
+//options (gogoproto.marshaler_all) = true;
+//options (gogoproto.sizer_all) = true;
+//options (gogoproto.unmarshaler_all) = true;
+//options (gogoproto.goproto_getters_all) = false;
+
+import "user.proto";
+import "repository.proto";
+
+message WatchEvent {
+	string action = 1;
+	Repository repository = 2;
+	User sender = 3;
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// https://developer.github.com/v3/activity/events/types/#releaseevent
+
+package github;
+
+
+
+//options (gogoproto.marshaler_all) = true;
+//options (gogoproto.sizer_all) = true;
+//options (gogoproto.unmarshaler_all) = true;
+//options (gogoproto.goproto_getters_all) = false;
+
+import "user.proto";
+import "release.proto";
+import "repository.proto";
+
+message ReleaseEvent {
+	string action = 1;
+	Release release = 2;
+	Repository repository = 3;
+	User sender = 4;
+}

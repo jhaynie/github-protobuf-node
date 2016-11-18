@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// NOTE: this event is deprecated but provided for older timelines
+// https://developer.github.com/v3/activity/events/types/#forkapplyevent
+
+package github;
+
+
+
+//options (gogoproto.marshaler_all) = true;
+//options (gogoproto.sizer_all) = true;
+//options (gogoproto.unmarshaler_all) = true;
+//options (gogoproto.goproto_getters_all) = false;
+
+message ForkApplyEvent {
+	string head = 1;
+	string header = 2;
+	string after = 3;
+}
