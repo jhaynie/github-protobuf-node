@@ -1,6 +1,6 @@
 {
   "name": "github-protobuf",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "node library for github api events in protobuf format",
   "author": "Jeff Haynie <jhaynie@gmail.com>",
   "keywords": [
