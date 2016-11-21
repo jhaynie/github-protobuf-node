@@ -820,3 +820,130 @@ proto.github.PageBuildEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Build
+proto.github.Build.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'status' in obj && this.setStatus(obj.status);
+	if ('error' in obj) {
+		var BuildError = require('./page_build_event_pb.js').BuildError;
+		var BuildErrorInstance = new BuildError();
+		this.setError(BuildErrorInstance.fromJSON(obj.error));
+	}
+	if ('pusher' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setPusher(UserInstance.fromJSON(obj.pusher));
+	}
+	'commit' in obj && this.setCommit(obj.commit);
+	'duration' in obj && this.setDuration(+obj.duration);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	return this;
+};
+
+proto.github.Build.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('status' in obj) {
+		obj.status = obj.status;
+		delete obj.status;
+	}
+	if ('error' in obj) {
+		obj.error = this.getError().toJSON();
+	}
+	if ('pusher' in obj) {
+		obj.pusher = this.getPusher().toJSON();
+	}
+	if ('commit' in obj) {
+		obj.commit = obj.commit;
+		delete obj.commit;
+	}
+	if ('duration' in obj) {
+		obj.duration = obj.duration;
+		delete obj.duration;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	return obj;
+};
+
+
+
+// .github.PageBuildEvent
+proto.github.PageBuildEvent.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	if ('build' in obj) {
+		var Build = require('./page_build_event_pb.js').Build;
+		var BuildInstance = new Build();
+		this.setBuild(BuildInstance.fromJSON(obj.build));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.PageBuildEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('build' in obj) {
+		obj.build = this.getBuild().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.BuildError
+proto.github.BuildError.prototype.fromJSON = function(obj) {
+	'message' in obj && this.setMessage(obj.message);
+	return this;
+};
+
+proto.github.BuildError.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('message' in obj) {
+		obj.message = obj.message;
+		delete obj.message;
+	}
+	return obj;
+};
+

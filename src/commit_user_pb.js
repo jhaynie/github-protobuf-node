@@ -242,3 +242,46 @@ proto.github.CommitUser.prototype.setDate = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.CommitUser
+proto.github.CommitUser.prototype.fromJSON = function(obj) {
+	'name' in obj && this.setName(obj.name);
+	'email' in obj && this.setEmail(obj.email);
+	'username' in obj && this.setUsername(obj.username);
+	'date' in obj && this.setDate(obj.date);
+	return this;
+};
+
+proto.github.CommitUser.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('email' in obj) {
+		obj.email = obj.email;
+		delete obj.email;
+	}
+	if ('username' in obj) {
+		obj.username = obj.username;
+		delete obj.username;
+	}
+	if ('date' in obj) {
+		obj.date = obj.date;
+		delete obj.date;
+	}
+	return obj;
+};
+

@@ -1102,3 +1102,179 @@ proto.github.PushEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.PushEvent
+proto.github.PushEvent.prototype.fromJSON = function(obj) {
+	'ref' in obj && this.setRef(obj.ref);
+	'before' in obj && this.setBefore(obj.before);
+	'after' in obj && this.setAfter(obj.after);
+	'created' in obj && this.setCreated(_toBool(obj.created));
+	'deleted' in obj && this.setDeleted(_toBool(obj.deleted));
+	'forced' in obj && this.setForced(_toBool(obj.forced));
+	'base_ref' in obj && this.setBaseRef(obj.base_ref);
+	'compare' in obj && this.setCompare(obj.compare);
+	if ('commits' in obj) {
+		var PushCommit = require('./push_event_pb.js').PushCommit;
+		var PushCommitInstance = new PushCommit();
+		this.setCommits(PushCommitInstance.fromJSON(obj.commits));
+	}
+	if ('head_commit' in obj) {
+		var PushCommit = require('./push_event_pb.js').PushCommit;
+		var PushCommitInstance = new PushCommit();
+		this.setHeadCommit(PushCommitInstance.fromJSON(obj.head_commit));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('pusher' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setPusher(CommitUserInstance.fromJSON(obj.pusher));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.PushEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('ref' in obj) {
+		obj.ref = obj.ref;
+		delete obj.ref;
+	}
+	if ('before' in obj) {
+		obj.before = obj.before;
+		delete obj.before;
+	}
+	if ('after' in obj) {
+		obj.after = obj.after;
+		delete obj.after;
+	}
+	if ('created' in obj) {
+		obj.created = obj.created;
+		delete obj.created;
+	}
+	if ('deleted' in obj) {
+		obj.deleted = obj.deleted;
+		delete obj.deleted;
+	}
+	if ('forced' in obj) {
+		obj.forced = obj.forced;
+		delete obj.forced;
+	}
+	if ('baseRef' in obj) {
+		obj.base_ref = obj.baseRef;
+		delete obj.baseRef;
+	}
+	if ('compare' in obj) {
+		obj.compare = obj.compare;
+		delete obj.compare;
+	}
+	if ('commits' in obj) {
+		obj.commits = this.getCommits().toJSON();
+	}
+	if ('headCommit' in obj) {
+		obj.head_commit = this.getHeadCommit().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('pusher' in obj) {
+		obj.pusher = this.getPusher().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.PushCommit
+proto.github.PushCommit.prototype.fromJSON = function(obj) {
+	'sha' in obj && this.setSha(obj.sha);
+	'tree_id' in obj && this.setTreeId(obj.tree_id);
+	'distinct' in obj && this.setDistinct(_toBool(obj.distinct));
+	'message' in obj && this.setMessage(obj.message);
+	'timestamp' in obj && this.setTimestamp(obj.timestamp);
+	'url' in obj && this.setUrl(obj.url);
+	if ('author' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setAuthor(CommitUserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setCommitter(CommitUserInstance.fromJSON(obj.committer));
+	}
+	'added' in obj && this.setAddedList(obj.added);
+	'removed' in obj && this.setRemovedList(obj.removed);
+	'modified' in obj && this.setModifiedList(obj.modified);
+	return this;
+};
+
+proto.github.PushCommit.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('treeId' in obj) {
+		obj.tree_id = obj.treeId;
+		delete obj.treeId;
+	}
+	if ('distinct' in obj) {
+		obj.distinct = obj.distinct;
+		delete obj.distinct;
+	}
+	if ('message' in obj) {
+		obj.message = obj.message;
+		delete obj.message;
+	}
+	if ('timestamp' in obj) {
+		obj.timestamp = obj.timestamp;
+		delete obj.timestamp;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('addedList' in obj) {
+		obj.added = obj.addedList;
+		delete obj.addedList;
+	}
+	if ('removedList' in obj) {
+		obj.removed = obj.removedList;
+		delete obj.removedList;
+	}
+	if ('modifiedList' in obj) {
+		obj.modified = obj.modifiedList;
+		delete obj.modifiedList;
+	}
+	return obj;
+};
+

@@ -599,3 +599,105 @@ proto.github.Ping.prototype.hasHook = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Hook
+proto.github.Hook.prototype.fromJSON = function(obj) {
+	'type' in obj && this.setType(obj.type);
+	'id' in obj && this.setId(+obj.id);
+	'name' in obj && this.setName(obj.name);
+	'active' in obj && this.setActive(_toBool(obj.active));
+	'events' in obj && this.setEventsList(obj.events);
+	if ('config' in obj) {
+		var m = this.getConfigMap();
+		Object.keys(obj.config).forEach(function(k) {
+			m.set(k, obj.config[k]);
+		});
+	}
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'integration_id' in obj && this.setIntegrationId(+obj.integration_id);
+	return this;
+};
+
+proto.github.Hook.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('type' in obj) {
+		obj.type = obj.type;
+		delete obj.type;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('active' in obj) {
+		obj.active = obj.active;
+		delete obj.active;
+	}
+	if ('eventsList' in obj) {
+		obj.events = obj.eventsList;
+		delete obj.eventsList;
+	}
+	if ('configMap' in obj) {
+		var config = this.getConfigMap();
+		obj.config = {};
+		delete obj.configMap;
+		config.forEach(function(v, k) {
+			obj.config[k] = v;
+		});
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('integrationId' in obj) {
+		obj.integration_id = obj.integrationId;
+		delete obj.integrationId;
+	}
+	return obj;
+};
+
+
+
+// .github.Ping
+proto.github.Ping.prototype.fromJSON = function(obj) {
+	'hook_id' in obj && this.setHookId(+obj.hook_id);
+	if ('hook' in obj) {
+		var Hook = require('./ping_pb.js').Hook;
+		var HookInstance = new Hook();
+		this.setHook(HookInstance.fromJSON(obj.hook));
+	}
+	return this;
+};
+
+proto.github.Ping.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('hookId' in obj) {
+		obj.hook_id = obj.hookId;
+		delete obj.hookId;
+	}
+	if ('hook' in obj) {
+		obj.hook = this.getHook().toJSON();
+	}
+	return obj;
+};
+

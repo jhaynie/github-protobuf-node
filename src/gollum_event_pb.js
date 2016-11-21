@@ -565,3 +565,92 @@ proto.github.GollumEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.GollumPage
+proto.github.GollumPage.prototype.fromJSON = function(obj) {
+	'page_name' in obj && this.setPageName(obj.page_name);
+	'title' in obj && this.setTitle(obj.title);
+	'summary' in obj && this.setSummary(obj.summary);
+	'action' in obj && this.setAction(obj.action);
+	'sha' in obj && this.setSha(obj.sha);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	return this;
+};
+
+proto.github.GollumPage.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('pageName' in obj) {
+		obj.page_name = obj.pageName;
+		delete obj.pageName;
+	}
+	if ('title' in obj) {
+		obj.title = obj.title;
+		delete obj.title;
+	}
+	if ('summary' in obj) {
+		obj.summary = obj.summary;
+		delete obj.summary;
+	}
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	return obj;
+};
+
+
+
+// .github.GollumEvent
+proto.github.GollumEvent.prototype.fromJSON = function(obj) {
+	if ('pages' in obj) {
+		var GollumPage = require('./gollum_event_pb.js').GollumPage;
+		var GollumPageInstance = new GollumPage();
+		this.setPages(GollumPageInstance.fromJSON(obj.pages));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.GollumEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('pages' in obj) {
+		obj.pages = this.getPages().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+

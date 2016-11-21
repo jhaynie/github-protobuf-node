@@ -295,3 +295,55 @@ proto.github.MemberEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.MemberEvent
+proto.github.MemberEvent.prototype.fromJSON = function(obj) {
+	'action' in obj && this.setAction(obj.action);
+	if ('member' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setMember(UserInstance.fromJSON(obj.member));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.MemberEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('member' in obj) {
+		obj.member = this.getMember().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+

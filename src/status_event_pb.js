@@ -1696,3 +1696,265 @@ proto.github.StatusEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.StatusCommitDetail
+proto.github.StatusCommitDetail.prototype.fromJSON = function(obj) {
+	if ('author' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setAuthor(CommitUserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setCommitter(CommitUserInstance.fromJSON(obj.committer));
+	}
+	'message' in obj && this.setMessage(obj.message);
+	if ('tree' in obj) {
+		var StatusCommitDetailTree = require('./status_event_pb.js').StatusCommitDetailTree;
+		var StatusCommitDetailTreeInstance = new StatusCommitDetailTree();
+		this.setTree(StatusCommitDetailTreeInstance.fromJSON(obj.tree));
+	}
+	'url' in obj && this.setUrl(obj.url);
+	'comment_count' in obj && this.setCommentCount(+obj.comment_count);
+	return this;
+};
+
+proto.github.StatusCommitDetail.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('message' in obj) {
+		obj.message = obj.message;
+		delete obj.message;
+	}
+	if ('tree' in obj) {
+		obj.tree = this.getTree().toJSON();
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('commentCount' in obj) {
+		obj.comment_count = obj.commentCount;
+		delete obj.commentCount;
+	}
+	return obj;
+};
+
+
+
+// .github.StatusCommitUpdate
+proto.github.StatusCommitUpdate.prototype.fromJSON = function(obj) {
+	'sha' in obj && this.setSha(obj.sha);
+	if ('commit' in obj) {
+		var StatusCommitDetail = require('./status_event_pb.js').StatusCommitDetail;
+		var StatusCommitDetailInstance = new StatusCommitDetail();
+		this.setCommit(StatusCommitDetailInstance.fromJSON(obj.commit));
+	}
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'comments_url' in obj && this.setCommentsUrl(obj.comments_url);
+	if ('author' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setAuthor(UserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCommitter(UserInstance.fromJSON(obj.committer));
+	}
+	if ('parents' in obj) {
+		var StatusCommitDetailTree = require('./status_event_pb.js').StatusCommitDetailTree;
+		var StatusCommitDetailTreeInstance = new StatusCommitDetailTree();
+		this.setParents(StatusCommitDetailTreeInstance.fromJSON(obj.parents));
+	}
+	return this;
+};
+
+proto.github.StatusCommitUpdate.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('commit' in obj) {
+		obj.commit = this.getCommit().toJSON();
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('commentsUrl' in obj) {
+		obj.comments_url = obj.commentsUrl;
+		delete obj.commentsUrl;
+	}
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('parents' in obj) {
+		obj.parents = this.getParents().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.StatusCommitDetailTree
+proto.github.StatusCommitDetailTree.prototype.fromJSON = function(obj) {
+	'sha' in obj && this.setSha(obj.sha);
+	'url' in obj && this.setUrl(obj.url);
+	return this;
+};
+
+proto.github.StatusCommitDetailTree.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	return obj;
+};
+
+
+
+// .github.StatusEvent
+proto.github.StatusEvent.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	'sha' in obj && this.setSha(obj.sha);
+	'name' in obj && this.setName(obj.name);
+	'target_url' in obj && this.setTargetUrl(obj.target_url);
+	'context' in obj && this.setContext(obj.context);
+	'description' in obj && this.setDescription(obj.description);
+	'state' in obj && this.setState(obj.state);
+	if ('commit' in obj) {
+		var StatusCommitUpdate = require('./status_event_pb.js').StatusCommitUpdate;
+		var StatusCommitUpdateInstance = new StatusCommitUpdate();
+		this.setCommit(StatusCommitUpdateInstance.fromJSON(obj.commit));
+	}
+	if ('branches' in obj) {
+		var StatusCommitBranch = require('./status_event_pb.js').StatusCommitBranch;
+		var StatusCommitBranchInstance = new StatusCommitBranch();
+		this.setBranches(StatusCommitBranchInstance.fromJSON(obj.branches));
+	}
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.StatusEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('targetUrl' in obj) {
+		obj.target_url = obj.targetUrl;
+		delete obj.targetUrl;
+	}
+	if ('context' in obj) {
+		obj.context = obj.context;
+		delete obj.context;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('commit' in obj) {
+		obj.commit = this.getCommit().toJSON();
+	}
+	if ('branches' in obj) {
+		obj.branches = this.getBranches().toJSON();
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.StatusCommitBranch
+proto.github.StatusCommitBranch.prototype.fromJSON = function(obj) {
+	'name' in obj && this.setName(obj.name);
+	if ('commit' in obj) {
+		var StatusCommitDetailTree = require('./status_event_pb.js').StatusCommitDetailTree;
+		var StatusCommitDetailTreeInstance = new StatusCommitDetailTree();
+		this.setCommit(StatusCommitDetailTreeInstance.fromJSON(obj.commit));
+	}
+	return this;
+};
+
+proto.github.StatusCommitBranch.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('commit' in obj) {
+		obj.commit = this.getCommit().toJSON();
+	}
+	return obj;
+};
+

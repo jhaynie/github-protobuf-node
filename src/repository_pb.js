@@ -2447,3 +2447,438 @@ proto.github.Repository.prototype.setAllowMergeCommit = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.RepositoryPermission
+proto.github.RepositoryPermission.prototype.fromJSON = function(obj) {
+	'admin' in obj && this.setAdmin(_toBool(obj.admin));
+	'push' in obj && this.setPush(_toBool(obj.push));
+	'pull' in obj && this.setPull(_toBool(obj.pull));
+	return this;
+};
+
+proto.github.RepositoryPermission.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('admin' in obj) {
+		obj.admin = obj.admin;
+		delete obj.admin;
+	}
+	if ('push' in obj) {
+		obj.push = obj.push;
+		delete obj.push;
+	}
+	if ('pull' in obj) {
+		obj.pull = obj.pull;
+		delete obj.pull;
+	}
+	return obj;
+};
+
+
+
+// .github.Repository
+proto.github.Repository.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	if ('owner' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setOwner(UserInstance.fromJSON(obj.owner));
+	}
+	'name' in obj && this.setName(obj.name);
+	'full_name' in obj && this.setFullName(obj.full_name);
+	'description' in obj && this.setDescription(obj.description);
+	'private' in obj && this.setPrivate(_toBool(obj.private));
+	'fork' in obj && this.setFork(_toBool(obj.fork));
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'archive_url' in obj && this.setArchiveUrl(obj.archive_url);
+	'assignees_url' in obj && this.setAssigneesUrl(obj.assignees_url);
+	'blobs_url' in obj && this.setBlobsUrl(obj.blobs_url);
+	'branches_url' in obj && this.setBranchesUrl(obj.branches_url);
+	'clone_url' in obj && this.setCloneUrl(obj.clone_url);
+	'collaborators_url' in obj && this.setCollaboratorsUrl(obj.collaborators_url);
+	'comments_url' in obj && this.setCommentsUrl(obj.comments_url);
+	'commits_url' in obj && this.setCommitsUrl(obj.commits_url);
+	'compare_url' in obj && this.setCompareUrl(obj.compare_url);
+	'contents_url' in obj && this.setContentsUrl(obj.contents_url);
+	'contributors_url' in obj && this.setContributorsUrl(obj.contributors_url);
+	'deployments_url' in obj && this.setDeploymentsUrl(obj.deployments_url);
+	'downloads_url' in obj && this.setDownloadsUrl(obj.downloads_url);
+	'events_url' in obj && this.setEventsUrl(obj.events_url);
+	'forks_url' in obj && this.setForksUrl(obj.forks_url);
+	'git_commits_url' in obj && this.setGitCommitsUrl(obj.git_commits_url);
+	'git_refs_url' in obj && this.setGitRefsUrl(obj.git_refs_url);
+	'git_tags_url' in obj && this.setGitTagsUrl(obj.git_tags_url);
+	'git_url' in obj && this.setGitUrl(obj.git_url);
+	'hooks_url' in obj && this.setHooksUrl(obj.hooks_url);
+	'issue_comment_url' in obj && this.setIssueCommentUrl(obj.issue_comment_url);
+	'issue_events_url' in obj && this.setIssueEventsUrl(obj.issue_events_url);
+	'issues_url' in obj && this.setIssuesUrl(obj.issues_url);
+	'keys_url' in obj && this.setKeysUrl(obj.keys_url);
+	'labels_url' in obj && this.setLabelsUrl(obj.labels_url);
+	'languages_url' in obj && this.setLanguagesUrl(obj.languages_url);
+	'merges_url' in obj && this.setMergesUrl(obj.merges_url);
+	'milestones_url' in obj && this.setMilestonesUrl(obj.milestones_url);
+	'mirror_url' in obj && this.setMirrorUrl(obj.mirror_url);
+	'notifications_url' in obj && this.setNotificationsUrl(obj.notifications_url);
+	'pulls_url' in obj && this.setPullsUrl(obj.pulls_url);
+	'releases_url' in obj && this.setReleasesUrl(obj.releases_url);
+	'ssh_url' in obj && this.setSshUrl(obj.ssh_url);
+	'stargazers_url' in obj && this.setStargazersUrl(obj.stargazers_url);
+	'statuses_url' in obj && this.setStatusesUrl(obj.statuses_url);
+	'subscribers_url' in obj && this.setSubscribersUrl(obj.subscribers_url);
+	'subscription_url' in obj && this.setSubscriptionUrl(obj.subscription_url);
+	'svn_url' in obj && this.setSvnUrl(obj.svn_url);
+	'tags_url' in obj && this.setTagsUrl(obj.tags_url);
+	'teams_url' in obj && this.setTeamsUrl(obj.teams_url);
+	'trees_url' in obj && this.setTreesUrl(obj.trees_url);
+	'homepage' in obj && this.setHomepage(obj.homepage);
+	'language' in obj && this.setLanguage(obj.language);
+	'forks_count' in obj && this.setForksCount(+obj.forks_count);
+	'stargazers_count' in obj && this.setStargazersCount(+obj.stargazers_count);
+	'watchers_count' in obj && this.setWatchersCount(+obj.watchers_count);
+	'network_count' in obj && this.setNetworkCount(+obj.network_count);
+	'RepoSize' in obj && this.setRepoSize(+obj.RepoSize);
+	'default_branch' in obj && this.setDefaultBranch(obj.default_branch);
+	'open_issues_count' in obj && this.setOpenIssuesCount(+obj.open_issues_count);
+	'has_issues' in obj && this.setHasIssues(_toBool(obj.has_issues));
+	'has_wiki' in obj && this.setHasWiki(_toBool(obj.has_wiki));
+	'has_pages' in obj && this.setHasPages(_toBool(obj.has_pages));
+	'has_downloads' in obj && this.setHasDownloads(_toBool(obj.has_downloads));
+	'pushed_at' in obj && this.setPushedAt(obj.pushed_at);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	if ('permissions' in obj) {
+		var RepositoryPermission = require('./repository_pb.js').RepositoryPermission;
+		var RepositoryPermissionInstance = new RepositoryPermission();
+		this.setPermissions(RepositoryPermissionInstance.fromJSON(obj.permissions));
+	}
+	'subscribers_count' in obj && this.setSubscribersCount(+obj.subscribers_count);
+	if ('organization' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setOrganization(UserInstance.fromJSON(obj.organization));
+	}
+	if ('parent' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setParent(RepositoryInstance.fromJSON(obj.parent));
+	}
+	if ('source' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setSource(RepositoryInstance.fromJSON(obj.source));
+	}
+	'allow_rebase_merge' in obj && this.setAllowRebaseMerge(_toBool(obj.allow_rebase_merge));
+	'allow_squash_merge' in obj && this.setAllowSquashMerge(_toBool(obj.allow_squash_merge));
+	'allow_merge_commit' in obj && this.setAllowMergeCommit(_toBool(obj.allow_merge_commit));
+	return this;
+};
+
+proto.github.Repository.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('owner' in obj) {
+		obj.owner = this.getOwner().toJSON();
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('fullName' in obj) {
+		obj.full_name = obj.fullName;
+		delete obj.fullName;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('private' in obj) {
+		obj.private = obj.private;
+		delete obj.private;
+	}
+	if ('fork' in obj) {
+		obj.fork = obj.fork;
+		delete obj.fork;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('archiveUrl' in obj) {
+		obj.archive_url = obj.archiveUrl;
+		delete obj.archiveUrl;
+	}
+	if ('assigneesUrl' in obj) {
+		obj.assignees_url = obj.assigneesUrl;
+		delete obj.assigneesUrl;
+	}
+	if ('blobsUrl' in obj) {
+		obj.blobs_url = obj.blobsUrl;
+		delete obj.blobsUrl;
+	}
+	if ('branchesUrl' in obj) {
+		obj.branches_url = obj.branchesUrl;
+		delete obj.branchesUrl;
+	}
+	if ('cloneUrl' in obj) {
+		obj.clone_url = obj.cloneUrl;
+		delete obj.cloneUrl;
+	}
+	if ('collaboratorsUrl' in obj) {
+		obj.collaborators_url = obj.collaboratorsUrl;
+		delete obj.collaboratorsUrl;
+	}
+	if ('commentsUrl' in obj) {
+		obj.comments_url = obj.commentsUrl;
+		delete obj.commentsUrl;
+	}
+	if ('commitsUrl' in obj) {
+		obj.commits_url = obj.commitsUrl;
+		delete obj.commitsUrl;
+	}
+	if ('compareUrl' in obj) {
+		obj.compare_url = obj.compareUrl;
+		delete obj.compareUrl;
+	}
+	if ('contentsUrl' in obj) {
+		obj.contents_url = obj.contentsUrl;
+		delete obj.contentsUrl;
+	}
+	if ('contributorsUrl' in obj) {
+		obj.contributors_url = obj.contributorsUrl;
+		delete obj.contributorsUrl;
+	}
+	if ('deploymentsUrl' in obj) {
+		obj.deployments_url = obj.deploymentsUrl;
+		delete obj.deploymentsUrl;
+	}
+	if ('downloadsUrl' in obj) {
+		obj.downloads_url = obj.downloadsUrl;
+		delete obj.downloadsUrl;
+	}
+	if ('eventsUrl' in obj) {
+		obj.events_url = obj.eventsUrl;
+		delete obj.eventsUrl;
+	}
+	if ('forksUrl' in obj) {
+		obj.forks_url = obj.forksUrl;
+		delete obj.forksUrl;
+	}
+	if ('gitCommitsUrl' in obj) {
+		obj.git_commits_url = obj.gitCommitsUrl;
+		delete obj.gitCommitsUrl;
+	}
+	if ('gitRefsUrl' in obj) {
+		obj.git_refs_url = obj.gitRefsUrl;
+		delete obj.gitRefsUrl;
+	}
+	if ('gitTagsUrl' in obj) {
+		obj.git_tags_url = obj.gitTagsUrl;
+		delete obj.gitTagsUrl;
+	}
+	if ('gitUrl' in obj) {
+		obj.git_url = obj.gitUrl;
+		delete obj.gitUrl;
+	}
+	if ('hooksUrl' in obj) {
+		obj.hooks_url = obj.hooksUrl;
+		delete obj.hooksUrl;
+	}
+	if ('issueCommentUrl' in obj) {
+		obj.issue_comment_url = obj.issueCommentUrl;
+		delete obj.issueCommentUrl;
+	}
+	if ('issueEventsUrl' in obj) {
+		obj.issue_events_url = obj.issueEventsUrl;
+		delete obj.issueEventsUrl;
+	}
+	if ('issuesUrl' in obj) {
+		obj.issues_url = obj.issuesUrl;
+		delete obj.issuesUrl;
+	}
+	if ('keysUrl' in obj) {
+		obj.keys_url = obj.keysUrl;
+		delete obj.keysUrl;
+	}
+	if ('labelsUrl' in obj) {
+		obj.labels_url = obj.labelsUrl;
+		delete obj.labelsUrl;
+	}
+	if ('languagesUrl' in obj) {
+		obj.languages_url = obj.languagesUrl;
+		delete obj.languagesUrl;
+	}
+	if ('mergesUrl' in obj) {
+		obj.merges_url = obj.mergesUrl;
+		delete obj.mergesUrl;
+	}
+	if ('milestonesUrl' in obj) {
+		obj.milestones_url = obj.milestonesUrl;
+		delete obj.milestonesUrl;
+	}
+	if ('mirrorUrl' in obj) {
+		obj.mirror_url = obj.mirrorUrl;
+		delete obj.mirrorUrl;
+	}
+	if ('notificationsUrl' in obj) {
+		obj.notifications_url = obj.notificationsUrl;
+		delete obj.notificationsUrl;
+	}
+	if ('pullsUrl' in obj) {
+		obj.pulls_url = obj.pullsUrl;
+		delete obj.pullsUrl;
+	}
+	if ('releasesUrl' in obj) {
+		obj.releases_url = obj.releasesUrl;
+		delete obj.releasesUrl;
+	}
+	if ('sshUrl' in obj) {
+		obj.ssh_url = obj.sshUrl;
+		delete obj.sshUrl;
+	}
+	if ('stargazersUrl' in obj) {
+		obj.stargazers_url = obj.stargazersUrl;
+		delete obj.stargazersUrl;
+	}
+	if ('statusesUrl' in obj) {
+		obj.statuses_url = obj.statusesUrl;
+		delete obj.statusesUrl;
+	}
+	if ('subscribersUrl' in obj) {
+		obj.subscribers_url = obj.subscribersUrl;
+		delete obj.subscribersUrl;
+	}
+	if ('subscriptionUrl' in obj) {
+		obj.subscription_url = obj.subscriptionUrl;
+		delete obj.subscriptionUrl;
+	}
+	if ('svnUrl' in obj) {
+		obj.svn_url = obj.svnUrl;
+		delete obj.svnUrl;
+	}
+	if ('tagsUrl' in obj) {
+		obj.tags_url = obj.tagsUrl;
+		delete obj.tagsUrl;
+	}
+	if ('teamsUrl' in obj) {
+		obj.teams_url = obj.teamsUrl;
+		delete obj.teamsUrl;
+	}
+	if ('treesUrl' in obj) {
+		obj.trees_url = obj.treesUrl;
+		delete obj.treesUrl;
+	}
+	if ('homepage' in obj) {
+		obj.homepage = obj.homepage;
+		delete obj.homepage;
+	}
+	if ('language' in obj) {
+		obj.language = obj.language;
+		delete obj.language;
+	}
+	if ('forksCount' in obj) {
+		obj.forks_count = obj.forksCount;
+		delete obj.forksCount;
+	}
+	if ('stargazersCount' in obj) {
+		obj.stargazers_count = obj.stargazersCount;
+		delete obj.stargazersCount;
+	}
+	if ('watchersCount' in obj) {
+		obj.watchers_count = obj.watchersCount;
+		delete obj.watchersCount;
+	}
+	if ('networkCount' in obj) {
+		obj.network_count = obj.networkCount;
+		delete obj.networkCount;
+	}
+	if ('size' in obj) {
+		obj.size = obj.size;
+		delete obj.size;
+	}
+	if ('defaultBranch' in obj) {
+		obj.default_branch = obj.defaultBranch;
+		delete obj.defaultBranch;
+	}
+	if ('openIssuesCount' in obj) {
+		obj.open_issues_count = obj.openIssuesCount;
+		delete obj.openIssuesCount;
+	}
+	if ('hasIssues' in obj) {
+		obj.has_issues = obj.hasIssues;
+		delete obj.hasIssues;
+	}
+	if ('hasWiki' in obj) {
+		obj.has_wiki = obj.hasWiki;
+		delete obj.hasWiki;
+	}
+	if ('hasPages' in obj) {
+		obj.has_pages = obj.hasPages;
+		delete obj.hasPages;
+	}
+	if ('hasDownloads' in obj) {
+		obj.has_downloads = obj.hasDownloads;
+		delete obj.hasDownloads;
+	}
+	if ('pushedAt' in obj) {
+		obj.pushed_at = obj.pushedAt;
+		delete obj.pushedAt;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('permissions' in obj) {
+		obj.permissions = this.getPermissions().toJSON();
+	}
+	if ('subscribersCount' in obj) {
+		obj.subscribers_count = obj.subscribersCount;
+		delete obj.subscribersCount;
+	}
+	if ('organization' in obj) {
+		obj.organization = this.getOrganization().toJSON();
+	}
+	if ('parent' in obj) {
+		obj.parent = this.getParent().toJSON();
+	}
+	if ('source' in obj) {
+		obj.source = this.getSource().toJSON();
+	}
+	if ('allowRebaseMerge' in obj) {
+		obj.allow_rebase_merge = obj.allowRebaseMerge;
+		delete obj.allowRebaseMerge;
+	}
+	if ('allowSquashMerge' in obj) {
+		obj.allow_squash_merge = obj.allowSquashMerge;
+		delete obj.allowSquashMerge;
+	}
+	if ('allowMergeCommit' in obj) {
+		obj.allow_merge_commit = obj.allowMergeCommit;
+		delete obj.allowMergeCommit;
+	}
+	return obj;
+};
+

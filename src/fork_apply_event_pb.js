@@ -215,3 +215,41 @@ proto.github.ForkApplyEvent.prototype.setAfter = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.ForkApplyEvent
+proto.github.ForkApplyEvent.prototype.fromJSON = function(obj) {
+	'head' in obj && this.setHead(obj.head);
+	'header' in obj && this.setHeader(obj.header);
+	'after' in obj && this.setAfter(obj.after);
+	return this;
+};
+
+proto.github.ForkApplyEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('head' in obj) {
+		obj.head = obj.head;
+		delete obj.head;
+	}
+	if ('header' in obj) {
+		obj.header = obj.header;
+		delete obj.header;
+	}
+	if ('after' in obj) {
+		obj.after = obj.after;
+		delete obj.after;
+	}
+	return obj;
+};
+

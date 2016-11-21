@@ -1108,3 +1108,192 @@ proto.github.Release.prototype.clearAssetsList = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Release
+proto.github.Release.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'assets_url' in obj && this.setAssetsUrl(obj.assets_url);
+	'upload_url' in obj && this.setUploadUrl(obj.upload_url);
+	'tarball_url' in obj && this.setTarballUrl(obj.tarball_url);
+	'zipball_url' in obj && this.setZipballUrl(obj.zipball_url);
+	'id' in obj && this.setId(+obj.id);
+	'tag_name' in obj && this.setTagName(obj.tag_name);
+	'target_commitish' in obj && this.setTargetCommitish(obj.target_commitish);
+	'name' in obj && this.setName(obj.name);
+	'body' in obj && this.setBody(obj.body);
+	'draft' in obj && this.setDraft(_toBool(obj.draft));
+	'prerelease' in obj && this.setPrerelease(_toBool(obj.prerelease));
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'published_at' in obj && this.setPublishedAt(obj.published_at);
+	if ('author' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setAuthor(UserInstance.fromJSON(obj.author));
+	}
+	if ('assets' in obj) {
+		var Asset = require('./release_pb.js').Asset;
+		var AssetInstance = new Asset();
+		this.setAssets(AssetInstance.fromJSON(obj.assets));
+	}
+	return this;
+};
+
+proto.github.Release.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('assetsUrl' in obj) {
+		obj.assets_url = obj.assetsUrl;
+		delete obj.assetsUrl;
+	}
+	if ('uploadUrl' in obj) {
+		obj.upload_url = obj.uploadUrl;
+		delete obj.uploadUrl;
+	}
+	if ('tarballUrl' in obj) {
+		obj.tarball_url = obj.tarballUrl;
+		delete obj.tarballUrl;
+	}
+	if ('zipballUrl' in obj) {
+		obj.zipball_url = obj.zipballUrl;
+		delete obj.zipballUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('tagName' in obj) {
+		obj.tag_name = obj.tagName;
+		delete obj.tagName;
+	}
+	if ('targetCommitish' in obj) {
+		obj.target_commitish = obj.targetCommitish;
+		delete obj.targetCommitish;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('body' in obj) {
+		obj.body = obj.body;
+		delete obj.body;
+	}
+	if ('draft' in obj) {
+		obj.draft = obj.draft;
+		delete obj.draft;
+	}
+	if ('prerelease' in obj) {
+		obj.prerelease = obj.prerelease;
+		delete obj.prerelease;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('publishedAt' in obj) {
+		obj.published_at = obj.publishedAt;
+		delete obj.publishedAt;
+	}
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('assets' in obj) {
+		obj.assets = this.getAssets().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.Asset
+proto.github.Asset.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'browser_download_url' in obj && this.setBrowserDownloadUrl(obj.browser_download_url);
+	'id' in obj && this.setId(+obj.id);
+	'name' in obj && this.setName(obj.name);
+	'label' in obj && this.setLabel(obj.label);
+	'state' in obj && this.setState(obj.state);
+	'content_type' in obj && this.setContentType(obj.content_type);
+	'FileSize' in obj && this.setFileSize(+obj.FileSize);
+	'download_count' in obj && this.setDownloadCount(+obj.download_count);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	if ('uploader' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUploader(UserInstance.fromJSON(obj.uploader));
+	}
+	return this;
+};
+
+proto.github.Asset.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('browserDownloadUrl' in obj) {
+		obj.browser_download_url = obj.browserDownloadUrl;
+		delete obj.browserDownloadUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('label' in obj) {
+		obj.label = obj.label;
+		delete obj.label;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('contentType' in obj) {
+		obj.content_type = obj.contentType;
+		delete obj.contentType;
+	}
+	if ('size' in obj) {
+		obj.size = obj.size;
+		delete obj.size;
+	}
+	if ('downloadCount' in obj) {
+		obj.download_count = obj.downloadCount;
+		delete obj.downloadCount;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('uploader' in obj) {
+		obj.uploader = this.getUploader().toJSON();
+	}
+	return obj;
+};
+

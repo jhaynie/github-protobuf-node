@@ -505,3 +505,103 @@ proto.github.Deployment.prototype.setRepositoryUrl = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Deployment
+proto.github.Deployment.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'id' in obj && this.setId(+obj.id);
+	'sha' in obj && this.setSha(obj.sha);
+	'ref' in obj && this.setRef(obj.ref);
+	'task' in obj && this.setTask(obj.task);
+	if ('payload' in obj) {
+		var m = this.getPayloadMap();
+		Object.keys(obj.payload).forEach(function(k) {
+			m.set(k, obj.payload[k]);
+		});
+	}
+	'environment' in obj && this.setEnvironment(obj.environment);
+	'description' in obj && this.setDescription(obj.description);
+	if ('creator' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCreator(UserInstance.fromJSON(obj.creator));
+	}
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	'statuses_url' in obj && this.setStatusesUrl(obj.statuses_url);
+	'repository_url' in obj && this.setRepositoryUrl(obj.repository_url);
+	return this;
+};
+
+proto.github.Deployment.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('ref' in obj) {
+		obj.ref = obj.ref;
+		delete obj.ref;
+	}
+	if ('task' in obj) {
+		obj.task = obj.task;
+		delete obj.task;
+	}
+	if ('payloadMap' in obj) {
+		var payload = this.getPayloadMap();
+		obj.payload = {};
+		delete obj.payloadMap;
+		payload.forEach(function(v, k) {
+			obj.payload[k] = v;
+		});
+	}
+	if ('environment' in obj) {
+		obj.environment = obj.environment;
+		delete obj.environment;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('creator' in obj) {
+		obj.creator = this.getCreator().toJSON();
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('statusesUrl' in obj) {
+		obj.statuses_url = obj.statusesUrl;
+		delete obj.statusesUrl;
+	}
+	if ('repositoryUrl' in obj) {
+		obj.repository_url = obj.repositoryUrl;
+		delete obj.repositoryUrl;
+	}
+	return obj;
+};
+

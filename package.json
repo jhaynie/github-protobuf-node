@@ -1,20 +1,27 @@
 {
   "name": "github-protobuf",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "node library for github api events in protobuf format",
   "author": "Jeff Haynie <jhaynie@gmail.com>",
   "keywords": [
-	 "github",
-	 "protobuf"
+    "github",
+    "protobuf"
   ],
+  "scripts": {
+	  "test": "./node_modules/.bin/mocha test"
+  },
   "licenses": [
-	  {
-		  "type": "MIT",
-		  "url": "http://www.opensource.org/licenses/mit-license.php"
-	  }
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
   ],
   "main": "index.js",
   "dependencies": {
     "google-protobuf": "^3.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "should": "^11.1.1"
   }
 }

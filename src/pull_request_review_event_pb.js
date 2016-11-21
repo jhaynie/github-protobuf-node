@@ -11,7 +11,7 @@ var global = Function('return this')();
 
 var user_pb = require('./user_pb.js');
 var repository_pb = require('./repository_pb.js');
-var pullrequest_pb = require('./pullrequest_pb.js');
+var pull_request_pb = require('./pull_request_pb.js');
 goog.exportSymbol('proto.github.PullRequestReview', null, global);
 goog.exportSymbol('proto.github.PullRequestReviewEvent', null, global);
 goog.exportSymbol('proto.github.PullRequestReviewLink', null, global);
@@ -798,7 +798,7 @@ proto.github.PullRequestReviewEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
     action: jspb.Message.getFieldWithDefault(msg, 1, ""),
     review: (f = msg.getReview()) && proto.github.PullRequestReview.toObject(includeInstance, f),
-    pullRequest: (f = msg.getPullRequest()) && pullrequest_pb.PullRequest.toObject(includeInstance, f),
+    pullRequest: (f = msg.getPullRequest()) && pull_request_pb.PullRequest.toObject(includeInstance, f),
     repository: (f = msg.getRepository()) && repository_pb.Repository.toObject(includeInstance, f),
     sender: (f = msg.getSender()) && user_pb.User.toObject(includeInstance, f)
   };
@@ -847,8 +847,8 @@ proto.github.PullRequestReviewEvent.deserializeBinaryFromReader = function(msg, 
       msg.setReview(value);
       break;
     case 3:
-      var value = new pullrequest_pb.PullRequest;
-      reader.readMessage(value,pullrequest_pb.PullRequest.deserializeBinaryFromReader);
+      var value = new pull_request_pb.PullRequest;
+      reader.readMessage(value,pull_request_pb.PullRequest.deserializeBinaryFromReader);
       msg.setPullRequest(value);
       break;
     case 4:
@@ -919,7 +919,7 @@ proto.github.PullRequestReviewEvent.prototype.serializeBinaryToWriter = function
     writer.writeMessage(
       3,
       f,
-      pullrequest_pb.PullRequest.serializeBinaryToWriter
+      pull_request_pb.PullRequest.serializeBinaryToWriter
     );
   }
   f = this.getRepository();
@@ -992,7 +992,7 @@ proto.github.PullRequestReviewEvent.prototype.hasReview = function() {
  */
 proto.github.PullRequestReviewEvent.prototype.getPullRequest = function() {
   return /** @type{?proto.github.PullRequest} */ (
-    jspb.Message.getWrapperField(this, pullrequest_pb.PullRequest, 3));
+    jspb.Message.getWrapperField(this, pull_request_pb.PullRequest, 3));
 };
 
 
@@ -1077,3 +1077,166 @@ proto.github.PullRequestReviewEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.PullRequestReviewLinks
+proto.github.PullRequestReviewLinks.prototype.fromJSON = function(obj) {
+	if ('html' in obj) {
+		var PullRequestReviewLink = require('./pull_request_review_event_pb.js').PullRequestReviewLink;
+		var PullRequestReviewLinkInstance = new PullRequestReviewLink();
+		this.setHtml(PullRequestReviewLinkInstance.fromJSON(obj.html));
+	}
+	if ('pull_request' in obj) {
+		var PullRequestReviewLink = require('./pull_request_review_event_pb.js').PullRequestReviewLink;
+		var PullRequestReviewLinkInstance = new PullRequestReviewLink();
+		this.setPullRequest(PullRequestReviewLinkInstance.fromJSON(obj.pull_request));
+	}
+	return this;
+};
+
+proto.github.PullRequestReviewLinks.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('html' in obj) {
+		obj.html = this.getHtml().toJSON();
+	}
+	if ('pullRequest' in obj) {
+		obj.pull_request = this.getPullRequest().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.PullRequestReview
+proto.github.PullRequestReview.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	'body' in obj && this.setBody(obj.body);
+	'submitted_at' in obj && this.setSubmittedAt(obj.submitted_at);
+	'state' in obj && this.setState(obj.state);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'pull_request_url' in obj && this.setPullRequestUrl(obj.pull_request_url);
+	if ('_links' in obj) {
+		var PullRequestReviewLinks = require('./pull_request_review_event_pb.js').PullRequestReviewLinks;
+		var PullRequestReviewLinksInstance = new PullRequestReviewLinks();
+		this.setLinks(PullRequestReviewLinksInstance.fromJSON(obj._links));
+	}
+	return this;
+};
+
+proto.github.PullRequestReview.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('body' in obj) {
+		obj.body = obj.body;
+		delete obj.body;
+	}
+	if ('submittedAt' in obj) {
+		obj.submitted_at = obj.submittedAt;
+		delete obj.submittedAt;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('pullRequestUrl' in obj) {
+		obj.pull_request_url = obj.pullRequestUrl;
+		delete obj.pullRequestUrl;
+	}
+	if ('Links' in obj) {
+		obj._links = this.getLinks().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.PullRequestReviewLink
+proto.github.PullRequestReviewLink.prototype.fromJSON = function(obj) {
+	'html' in obj && this.setHtml(obj.html);
+	return this;
+};
+
+proto.github.PullRequestReviewLink.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('html' in obj) {
+		obj.html = obj.html;
+		delete obj.html;
+	}
+	return obj;
+};
+
+
+
+// .github.PullRequestReviewEvent
+proto.github.PullRequestReviewEvent.prototype.fromJSON = function(obj) {
+	'action' in obj && this.setAction(obj.action);
+	if ('review' in obj) {
+		var PullRequestReview = require('./pull_request_review_event_pb.js').PullRequestReview;
+		var PullRequestReviewInstance = new PullRequestReview();
+		this.setReview(PullRequestReviewInstance.fromJSON(obj.review));
+	}
+	if ('pull_request' in obj) {
+		var PullRequest = require('./pull_request_pb.js').PullRequest;
+		var PullRequestInstance = new PullRequest();
+		this.setPullRequest(PullRequestInstance.fromJSON(obj.pull_request));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.PullRequestReviewEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('review' in obj) {
+		obj.review = this.getReview().toJSON();
+	}
+	if ('pullRequest' in obj) {
+		obj.pull_request = this.getPullRequest().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+

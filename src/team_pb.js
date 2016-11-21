@@ -350,3 +350,66 @@ proto.github.Team.prototype.setRepositoriesUrl = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Team
+proto.github.Team.prototype.fromJSON = function(obj) {
+	'name' in obj && this.setName(obj.name);
+	'id' in obj && this.setId(+obj.id);
+	'slug' in obj && this.setSlug(obj.slug);
+	'description' in obj && this.setDescription(obj.description);
+	'permission' in obj && this.setPermission(obj.permission);
+	'url' in obj && this.setUrl(obj.url);
+	'members_url' in obj && this.setMembersUrl(obj.members_url);
+	'repositories_url' in obj && this.setRepositoriesUrl(obj.repositories_url);
+	return this;
+};
+
+proto.github.Team.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('slug' in obj) {
+		obj.slug = obj.slug;
+		delete obj.slug;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('permission' in obj) {
+		obj.permission = obj.permission;
+		delete obj.permission;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('membersUrl' in obj) {
+		obj.members_url = obj.membersUrl;
+		delete obj.membersUrl;
+	}
+	if ('repositoriesUrl' in obj) {
+		obj.repositories_url = obj.repositoriesUrl;
+		delete obj.repositoriesUrl;
+	}
+	return obj;
+};
+

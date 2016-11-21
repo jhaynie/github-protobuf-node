@@ -305,3 +305,57 @@ proto.github.DeleteEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.DeleteEvent
+proto.github.DeleteEvent.prototype.fromJSON = function(obj) {
+	'ref' in obj && this.setRef(obj.ref);
+	'ref_type' in obj && this.setRefType(obj.ref_type);
+	'pusher_type' in obj && this.setPusherType(obj.pusher_type);
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.DeleteEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('ref' in obj) {
+		obj.ref = obj.ref;
+		delete obj.ref;
+	}
+	if ('refType' in obj) {
+		obj.ref_type = obj.refType;
+		delete obj.refType;
+	}
+	if ('pusherType' in obj) {
+		obj.pusher_type = obj.pusherType;
+		delete obj.pusherType;
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+

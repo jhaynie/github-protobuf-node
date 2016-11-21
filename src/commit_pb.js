@@ -2639,3 +2639,424 @@ proto.github.Commit.prototype.hasRepo = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.CommitFileDetail
+proto.github.CommitFileDetail.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(obj.id);
+	'commit' in obj && this.setCommit(obj.commit);
+	if ('author' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setAuthor(UserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCommitter(UserInstance.fromJSON(obj.committer));
+	}
+	'binary' in obj && this.setBinary(_toBool(obj.binary));
+	'body' in obj && this.setBody(obj.body);
+	'patch' in obj && this.setPatch(obj.patch);
+	'filename' in obj && this.setFilename(obj.filename);
+	'language' in obj && this.setLanguage(obj.language);
+	'mimetype' in obj && this.setMimetype(obj.mimetype);
+	'status' in obj && this.setStatus(obj.status);
+	'FileSize' in obj && this.setFileSize(+obj.FileSize);
+	'additions' in obj && this.setAdditions(+obj.additions);
+	'deletions' in obj && this.setDeletions(+obj.deletions);
+	if ('licenses' in obj) {
+		var m = this.getLicensesMap();
+		Object.keys(obj.licenses).forEach(function(k) {
+			var CommitLicense = require('./commit_pb.js').CommitLicense;
+			var CommitLicenseInstance = new CommitLicense();
+			var v = CommitLicenseInstance.fromJSON(obj.licenses[k]));
+			m.set(k, v);
+		});
+	}
+	if ('frameworks' in obj) {
+		var CommitFramework = require('./commit_pb.js').CommitFramework;
+		var CommitFrameworkInstance = new CommitFramework();
+		this.setFrameworks(CommitFrameworkInstance.fromJSON(obj.frameworks));
+	}
+	if ('linguist' in obj) {
+		var CommitLinguist = require('./commit_pb.js').CommitLinguist;
+		var CommitLinguistInstance = new CommitLinguist();
+		this.setLinguist(CommitLinguistInstance.fromJSON(obj.linguist));
+	}
+	return this;
+};
+
+proto.github.CommitFileDetail.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('commit' in obj) {
+		obj.commit = obj.commit;
+		delete obj.commit;
+	}
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('binary' in obj) {
+		obj.binary = obj.binary;
+		delete obj.binary;
+	}
+	if ('body' in obj) {
+		obj.body = obj.body;
+		delete obj.body;
+	}
+	if ('patch' in obj) {
+		obj.patch = obj.patch;
+		delete obj.patch;
+	}
+	if ('filename' in obj) {
+		obj.filename = obj.filename;
+		delete obj.filename;
+	}
+	if ('language' in obj) {
+		obj.language = obj.language;
+		delete obj.language;
+	}
+	if ('mimetype' in obj) {
+		obj.mimetype = obj.mimetype;
+		delete obj.mimetype;
+	}
+	if ('status' in obj) {
+		obj.status = obj.status;
+		delete obj.status;
+	}
+	if ('size' in obj) {
+		obj.size = obj.size;
+		delete obj.size;
+	}
+	if ('additions' in obj) {
+		obj.additions = obj.additions;
+		delete obj.additions;
+	}
+	if ('deletions' in obj) {
+		obj.deletions = obj.deletions;
+		delete obj.deletions;
+	}
+	if ('licensesMap' in obj) {
+		var licenses = this.getLicensesMap();
+		obj.licenses = {};
+		delete obj.licensesMap;
+		licenses.forEach(function(v, k) {
+			obj.licenses[k] = v;
+		});
+	}
+	if ('frameworks' in obj) {
+		obj.frameworks = this.getFrameworks().toJSON();
+	}
+	if ('linguist' in obj) {
+		obj.linguist = this.getLinguist().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.CommitDetailTree
+proto.github.CommitDetailTree.prototype.fromJSON = function(obj) {
+	'sha' in obj && this.setSha(obj.sha);
+	'url' in obj && this.setUrl(obj.url);
+	return this;
+};
+
+proto.github.CommitDetailTree.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	return obj;
+};
+
+
+
+// .github.CommitDetail
+proto.github.CommitDetail.prototype.fromJSON = function(obj) {
+	if ('author' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setAuthor(CommitUserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var CommitUser = require('./commit_user_pb.js').CommitUser;
+		var CommitUserInstance = new CommitUser();
+		this.setCommitter(CommitUserInstance.fromJSON(obj.committer));
+	}
+	'comment_count' in obj && this.setCommentCount(+obj.comment_count);
+	'message' in obj && this.setMessage(obj.message);
+	if ('tree' in obj) {
+		var CommitDetailTree = require('./commit_pb.js').CommitDetailTree;
+		var CommitDetailTreeInstance = new CommitDetailTree();
+		this.setTree(CommitDetailTreeInstance.fromJSON(obj.tree));
+	}
+	'url' in obj && this.setUrl(obj.url);
+	return this;
+};
+
+proto.github.CommitDetail.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('commentCount' in obj) {
+		obj.comment_count = obj.commentCount;
+		delete obj.commentCount;
+	}
+	if ('message' in obj) {
+		obj.message = obj.message;
+		delete obj.message;
+	}
+	if ('tree' in obj) {
+		obj.tree = this.getTree().toJSON();
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	return obj;
+};
+
+
+
+// .github.CommitLicense
+proto.github.CommitLicense.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(obj.id);
+	'name' in obj && this.setName(obj.name);
+	'url' in obj && this.setUrl(obj.url);
+	'osiApproved' in obj && this.setOsiApproved(_toBool(obj.osiApproved));
+	'license' in obj && this.setLicense(obj.license);
+	return this;
+};
+
+proto.github.CommitLicense.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('osiApproved' in obj) {
+		obj.osiApproved = obj.osiApproved;
+		delete obj.osiApproved;
+	}
+	if ('license' in obj) {
+		obj.license = obj.license;
+		delete obj.license;
+	}
+	return obj;
+};
+
+
+
+// .github.CommitLinguist
+proto.github.CommitLinguist.prototype.fromJSON = function(obj) {
+	'content_type' in obj && this.setContentType(obj.content_type);
+	'disposition' in obj && this.setDisposition(obj.disposition);
+	'extname' in obj && this.setExtname(obj.extname);
+	'is_binary' in obj && this.setIsBinary(_toBool(obj.is_binary));
+	'is_documentation' in obj && this.setIsDocumentation(_toBool(obj.is_documentation));
+	'is_generated' in obj && this.setIsGenerated(_toBool(obj.is_generated));
+	'is_high_ratio_of_long_lines' in obj && this.setIsHighRatioOfLongLines(_toBool(obj.is_high_ratio_of_long_lines));
+	'is_image' in obj && this.setIsImage(_toBool(obj.is_image));
+	'is_large' in obj && this.setIsLarge(_toBool(obj.is_large));
+	'is_safe_to_colorize' in obj && this.setIsSafeToColorize(_toBool(obj.is_safe_to_colorize));
+	'is_text' in obj && this.setIsText(_toBool(obj.is_text));
+	'is_vendored' in obj && this.setIsVendored(_toBool(obj.is_vendored));
+	'is_viewable' in obj && this.setIsViewable(_toBool(obj.is_viewable));
+	'loc' in obj && this.setLoc(+obj.loc);
+	'sloc' in obj && this.setSloc(+obj.sloc);
+	'type' in obj && this.setType(obj.type);
+	return this;
+};
+
+proto.github.CommitLinguist.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('contentType' in obj) {
+		obj.content_type = obj.contentType;
+		delete obj.contentType;
+	}
+	if ('disposition' in obj) {
+		obj.disposition = obj.disposition;
+		delete obj.disposition;
+	}
+	if ('extname' in obj) {
+		obj.extname = obj.extname;
+		delete obj.extname;
+	}
+	if ('isBinary' in obj) {
+		obj.is_binary = obj.isBinary;
+		delete obj.isBinary;
+	}
+	if ('isDocumentation' in obj) {
+		obj.is_documentation = obj.isDocumentation;
+		delete obj.isDocumentation;
+	}
+	if ('isGenerated' in obj) {
+		obj.is_generated = obj.isGenerated;
+		delete obj.isGenerated;
+	}
+	if ('isHighRatioOfLongLines' in obj) {
+		obj.is_high_ratio_of_long_lines = obj.isHighRatioOfLongLines;
+		delete obj.isHighRatioOfLongLines;
+	}
+	if ('isImage' in obj) {
+		obj.is_image = obj.isImage;
+		delete obj.isImage;
+	}
+	if ('isLarge' in obj) {
+		obj.is_large = obj.isLarge;
+		delete obj.isLarge;
+	}
+	if ('isSafeToColorize' in obj) {
+		obj.is_safe_to_colorize = obj.isSafeToColorize;
+		delete obj.isSafeToColorize;
+	}
+	if ('isText' in obj) {
+		obj.is_text = obj.isText;
+		delete obj.isText;
+	}
+	if ('isVendored' in obj) {
+		obj.is_vendored = obj.isVendored;
+		delete obj.isVendored;
+	}
+	if ('isViewable' in obj) {
+		obj.is_viewable = obj.isViewable;
+		delete obj.isViewable;
+	}
+	if ('loc' in obj) {
+		obj.loc = obj.loc;
+		delete obj.loc;
+	}
+	if ('sloc' in obj) {
+		obj.sloc = obj.sloc;
+		delete obj.sloc;
+	}
+	if ('type' in obj) {
+		obj.type = obj.type;
+		delete obj.type;
+	}
+	return obj;
+};
+
+
+
+// .github.CommitFramework
+proto.github.CommitFramework.prototype.fromJSON = function(obj) {
+	'name' in obj && this.setName(obj.name);
+	return this;
+};
+
+proto.github.CommitFramework.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	return obj;
+};
+
+
+
+// .github.Commit
+proto.github.Commit.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(obj.id);
+	'sha' in obj && this.setSha(obj.sha);
+	if ('author' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setAuthor(UserInstance.fromJSON(obj.author));
+	}
+	if ('committer' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCommitter(UserInstance.fromJSON(obj.committer));
+	}
+	if ('commit' in obj) {
+		var CommitDetail = require('./commit_pb.js').CommitDetail;
+		var CommitDetailInstance = new CommitDetail();
+		this.setCommit(CommitDetailInstance.fromJSON(obj.commit));
+	}
+	if ('files' in obj) {
+		var CommitFileDetail = require('./commit_pb.js').CommitFileDetail;
+		var CommitFileDetailInstance = new CommitFileDetail();
+		this.setFiles(CommitFileDetailInstance.fromJSON(obj.files));
+	}
+	if ('parents' in obj) {
+		var CommitDetailTree = require('./commit_pb.js').CommitDetailTree;
+		var CommitDetailTreeInstance = new CommitDetailTree();
+		this.setParents(CommitDetailTreeInstance.fromJSON(obj.parents));
+	}
+	if ('repo' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepo(RepositoryInstance.fromJSON(obj.repo));
+	}
+	return this;
+};
+
+proto.github.Commit.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('sha' in obj) {
+		obj.sha = obj.sha;
+		delete obj.sha;
+	}
+	if ('author' in obj) {
+		obj.author = this.getAuthor().toJSON();
+	}
+	if ('committer' in obj) {
+		obj.committer = this.getCommitter().toJSON();
+	}
+	if ('commit' in obj) {
+		obj.commit = this.getCommit().toJSON();
+	}
+	if ('files' in obj) {
+		obj.files = this.getFiles().toJSON();
+	}
+	if ('parents' in obj) {
+		obj.parents = this.getParents().toJSON();
+	}
+	if ('repo' in obj) {
+		obj.repo = this.getRepo().toJSON();
+	}
+	return obj;
+};
+

@@ -10,11 +10,21 @@ fs.readdirSync(srcdir).filter(function(n) {
 	var camelCased = proper.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
 	function getter() {
 		var o = require(path.join(srcdir, name + '_pb.js'));
-		return o[proper];
+		if (camelCased in o) {
+			return o[camelCased];
+		}
 	}
 	Object.defineProperty(exports, camelCased, {
 		get: getter,
 		enumerable: true,
 		configurable: true
 	});
+});
+
+Object.defineProperty(exports, 'derser', {
+	get: function() {
+		return require('./src/derser');
+	},
+	enumerable: true,
+	configurable: true
 });

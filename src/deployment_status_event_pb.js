@@ -724,3 +724,123 @@ proto.github.DeploymentStatusEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.DeploymentStatusEvent
+proto.github.DeploymentStatusEvent.prototype.fromJSON = function(obj) {
+	if ('deployment_status' in obj) {
+		var DeploymentStatus = require('./deployment_status_event_pb.js').DeploymentStatus;
+		var DeploymentStatusInstance = new DeploymentStatus();
+		this.setDeploymentStatus(DeploymentStatusInstance.fromJSON(obj.deployment_status));
+	}
+	if ('deployment' in obj) {
+		var Deployment = require('./deployment_pb.js').Deployment;
+		var DeploymentInstance = new Deployment();
+		this.setDeployment(DeploymentInstance.fromJSON(obj.deployment));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.DeploymentStatusEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('deploymentStatus' in obj) {
+		obj.deployment_status = this.getDeploymentStatus().toJSON();
+	}
+	if ('deployment' in obj) {
+		obj.deployment = this.getDeployment().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.DeploymentStatus
+proto.github.DeploymentStatus.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'id' in obj && this.setId(+obj.id);
+	'state' in obj && this.setState(obj.state);
+	if ('creator' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCreator(UserInstance.fromJSON(obj.creator));
+	}
+	'description' in obj && this.setDescription(obj.description);
+	'target_url' in obj && this.setTargetUrl(obj.target_url);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	'deployment_url' in obj && this.setDeploymentUrl(obj.deployment_url);
+	'repository_url' in obj && this.setRepositoryUrl(obj.repository_url);
+	return this;
+};
+
+proto.github.DeploymentStatus.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('creator' in obj) {
+		obj.creator = this.getCreator().toJSON();
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('targetUrl' in obj) {
+		obj.target_url = obj.targetUrl;
+		delete obj.targetUrl;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('deploymentUrl' in obj) {
+		obj.deployment_url = obj.deploymentUrl;
+		delete obj.deploymentUrl;
+	}
+	if ('repositoryUrl' in obj) {
+		obj.repository_url = obj.repositoryUrl;
+		delete obj.repositoryUrl;
+	}
+	return obj;
+};
+

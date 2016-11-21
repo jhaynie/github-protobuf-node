@@ -366,3 +366,68 @@ proto.github.MembershipEvent.prototype.hasOrganization = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.MembershipEvent
+proto.github.MembershipEvent.prototype.fromJSON = function(obj) {
+	'action' in obj && this.setAction(obj.action);
+	'scope' in obj && this.setScope(obj.scope);
+	if ('member' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setMember(UserInstance.fromJSON(obj.member));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	if ('team' in obj) {
+		var Team = require('./team_pb.js').Team;
+		var TeamInstance = new Team();
+		this.setTeam(TeamInstance.fromJSON(obj.team));
+	}
+	if ('organization' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setOrganization(UserInstance.fromJSON(obj.organization));
+	}
+	return this;
+};
+
+proto.github.MembershipEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('scope' in obj) {
+		obj.scope = obj.scope;
+		delete obj.scope;
+	}
+	if ('member' in obj) {
+		obj.member = this.getMember().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	if ('team' in obj) {
+		obj.team = this.getTeam().toJSON();
+	}
+	if ('organization' in obj) {
+		obj.organization = this.getOrganization().toJSON();
+	}
+	return obj;
+};
+

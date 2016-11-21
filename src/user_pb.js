@@ -948,3 +948,176 @@ proto.github.User.prototype.setUpdatedAt = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.User
+proto.github.User.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	'login' in obj && this.setLogin(obj.login);
+	'avatar_url' in obj && this.setAvatarUrl(obj.avatar_url);
+	'gravatar_id' in obj && this.setGravatarId(obj.gravatar_id);
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'followers_url' in obj && this.setFollowersUrl(obj.followers_url);
+	'following_url' in obj && this.setFollowingUrl(obj.following_url);
+	'gists_url' in obj && this.setGistsUrl(obj.gists_url);
+	'starred_url' in obj && this.setStarredUrl(obj.starred_url);
+	'subscriptions_url' in obj && this.setSubscriptionsUrl(obj.subscriptions_url);
+	'organizations_url' in obj && this.setOrganizationsUrl(obj.organizations_url);
+	'repos_url' in obj && this.setReposUrl(obj.repos_url);
+	'events_url' in obj && this.setEventsUrl(obj.events_url);
+	'received_events_url' in obj && this.setReceivedEventsUrl(obj.received_events_url);
+	'type' in obj && this.setType(obj.type);
+	'site_admin' in obj && this.setSiteAdmin(_toBool(obj.site_admin));
+	'name' in obj && this.setName(obj.name);
+	'company' in obj && this.setCompany(obj.company);
+	'blog' in obj && this.setBlog(obj.blog);
+	'location' in obj && this.setLocation(obj.location);
+	'email' in obj && this.setEmail(obj.email);
+	'hireable' in obj && this.setHireable(_toBool(obj.hireable));
+	'bio' in obj && this.setBio(obj.bio);
+	'public_repos' in obj && this.setPublicRepos(+obj.public_repos);
+	'public_gists' in obj && this.setPublicGists(+obj.public_gists);
+	'followers' in obj && this.setFollowers(+obj.followers);
+	'following' in obj && this.setFollowing(+obj.following);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	return this;
+};
+
+proto.github.User.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('login' in obj) {
+		obj.login = obj.login;
+		delete obj.login;
+	}
+	if ('avatarUrl' in obj) {
+		obj.avatar_url = obj.avatarUrl;
+		delete obj.avatarUrl;
+	}
+	if ('gravatarId' in obj) {
+		obj.gravatar_id = obj.gravatarId;
+		delete obj.gravatarId;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('followersUrl' in obj) {
+		obj.followers_url = obj.followersUrl;
+		delete obj.followersUrl;
+	}
+	if ('followingUrl' in obj) {
+		obj.following_url = obj.followingUrl;
+		delete obj.followingUrl;
+	}
+	if ('gistsUrl' in obj) {
+		obj.gists_url = obj.gistsUrl;
+		delete obj.gistsUrl;
+	}
+	if ('starredUrl' in obj) {
+		obj.starred_url = obj.starredUrl;
+		delete obj.starredUrl;
+	}
+	if ('subscriptionsUrl' in obj) {
+		obj.subscriptions_url = obj.subscriptionsUrl;
+		delete obj.subscriptionsUrl;
+	}
+	if ('organizationsUrl' in obj) {
+		obj.organizations_url = obj.organizationsUrl;
+		delete obj.organizationsUrl;
+	}
+	if ('reposUrl' in obj) {
+		obj.repos_url = obj.reposUrl;
+		delete obj.reposUrl;
+	}
+	if ('eventsUrl' in obj) {
+		obj.events_url = obj.eventsUrl;
+		delete obj.eventsUrl;
+	}
+	if ('receivedEventsUrl' in obj) {
+		obj.received_events_url = obj.receivedEventsUrl;
+		delete obj.receivedEventsUrl;
+	}
+	if ('type' in obj) {
+		obj.type = obj.type;
+		delete obj.type;
+	}
+	if ('siteAdmin' in obj) {
+		obj.site_admin = obj.siteAdmin;
+		delete obj.siteAdmin;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('company' in obj) {
+		obj.company = obj.company;
+		delete obj.company;
+	}
+	if ('blog' in obj) {
+		obj.blog = obj.blog;
+		delete obj.blog;
+	}
+	if ('location' in obj) {
+		obj.location = obj.location;
+		delete obj.location;
+	}
+	if ('email' in obj) {
+		obj.email = obj.email;
+		delete obj.email;
+	}
+	if ('hireable' in obj) {
+		obj.hireable = obj.hireable;
+		delete obj.hireable;
+	}
+	if ('bio' in obj) {
+		obj.bio = obj.bio;
+		delete obj.bio;
+	}
+	if ('publicRepos' in obj) {
+		obj.public_repos = obj.publicRepos;
+		delete obj.publicRepos;
+	}
+	if ('publicGists' in obj) {
+		obj.public_gists = obj.publicGists;
+		delete obj.publicGists;
+	}
+	if ('followers' in obj) {
+		obj.followers = obj.followers;
+		delete obj.followers;
+	}
+	if ('following' in obj) {
+		obj.following = obj.following;
+		delete obj.following;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	return obj;
+};
+

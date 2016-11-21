@@ -1006,3 +1006,173 @@ proto.github.Issue.prototype.hasClosedBy = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Issue
+proto.github.Issue.prototype.fromJSON = function(obj) {
+	'id' in obj && this.setId(+obj.id);
+	'url' in obj && this.setUrl(obj.url);
+	'repository_url' in obj && this.setRepositoryUrl(obj.repository_url);
+	'labels_url' in obj && this.setLabelsUrl(obj.labels_url);
+	'comments_url' in obj && this.setCommentsUrl(obj.comments_url);
+	'events_url' in obj && this.setEventsUrl(obj.events_url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'number' in obj && this.setNumber(+obj.number);
+	'state' in obj && this.setState(obj.state);
+	'title' in obj && this.setTitle(obj.title);
+	'body' in obj && this.setBody(obj.body);
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	if ('labels' in obj) {
+		var Label = require('./issue_pb.js').Label;
+		var LabelInstance = new Label();
+		this.setLabels(LabelInstance.fromJSON(obj.labels));
+	}
+	if ('assignee' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setAssignee(UserInstance.fromJSON(obj.assignee));
+	}
+	if ('milestone' in obj) {
+		var Milestone = require('./milestone_pb.js').Milestone;
+		var MilestoneInstance = new Milestone();
+		this.setMilestone(MilestoneInstance.fromJSON(obj.milestone));
+	}
+	'locked' in obj && this.setLocked(_toBool(obj.locked));
+	'comments' in obj && this.setComments(+obj.comments);
+	'closed_at' in obj && this.setClosedAt(obj.closed_at);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	if ('closed_by' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setClosedBy(UserInstance.fromJSON(obj.closed_by));
+	}
+	return this;
+};
+
+proto.github.Issue.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('repositoryUrl' in obj) {
+		obj.repository_url = obj.repositoryUrl;
+		delete obj.repositoryUrl;
+	}
+	if ('labelsUrl' in obj) {
+		obj.labels_url = obj.labelsUrl;
+		delete obj.labelsUrl;
+	}
+	if ('commentsUrl' in obj) {
+		obj.comments_url = obj.commentsUrl;
+		delete obj.commentsUrl;
+	}
+	if ('eventsUrl' in obj) {
+		obj.events_url = obj.eventsUrl;
+		delete obj.eventsUrl;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('number' in obj) {
+		obj.number = obj.number;
+		delete obj.number;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('title' in obj) {
+		obj.title = obj.title;
+		delete obj.title;
+	}
+	if ('body' in obj) {
+		obj.body = obj.body;
+		delete obj.body;
+	}
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('labels' in obj) {
+		obj.labels = this.getLabels().toJSON();
+	}
+	if ('assignee' in obj) {
+		obj.assignee = this.getAssignee().toJSON();
+	}
+	if ('milestone' in obj) {
+		obj.milestone = this.getMilestone().toJSON();
+	}
+	if ('locked' in obj) {
+		obj.locked = obj.locked;
+		delete obj.locked;
+	}
+	if ('comments' in obj) {
+		obj.comments = obj.comments;
+		delete obj.comments;
+	}
+	if ('closedAt' in obj) {
+		obj.closed_at = obj.closedAt;
+		delete obj.closedAt;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('closedBy' in obj) {
+		obj.closed_by = this.getClosedBy().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.Label
+proto.github.Label.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'name' in obj && this.setName(obj.name);
+	'color' in obj && this.setColor(obj.color);
+	return this;
+};
+
+proto.github.Label.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('color' in obj) {
+		obj.color = obj.color;
+		delete obj.color;
+	}
+	return obj;
+};
+

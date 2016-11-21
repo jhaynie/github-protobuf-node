@@ -557,3 +557,104 @@ proto.github.Milestone.prototype.setDueOn = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Milestone
+proto.github.Milestone.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'labels_url' in obj && this.setLabelsUrl(obj.labels_url);
+	'id' in obj && this.setId(+obj.id);
+	'number' in obj && this.setNumber(+obj.number);
+	'state' in obj && this.setState(obj.state);
+	'title' in obj && this.setTitle(obj.title);
+	'description' in obj && this.setDescription(obj.description);
+	if ('creator' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setCreator(UserInstance.fromJSON(obj.creator));
+	}
+	'open_issues' in obj && this.setOpenIssues(+obj.open_issues);
+	'closed_issues' in obj && this.setClosedIssues(+obj.closed_issues);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	'closed_at' in obj && this.setClosedAt(obj.closed_at);
+	'due_on' in obj && this.setDueOn(obj.due_on);
+	return this;
+};
+
+proto.github.Milestone.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('labelsUrl' in obj) {
+		obj.labels_url = obj.labelsUrl;
+		delete obj.labelsUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('number' in obj) {
+		obj.number = obj.number;
+		delete obj.number;
+	}
+	if ('state' in obj) {
+		obj.state = obj.state;
+		delete obj.state;
+	}
+	if ('title' in obj) {
+		obj.title = obj.title;
+		delete obj.title;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('creator' in obj) {
+		obj.creator = this.getCreator().toJSON();
+	}
+	if ('openIssues' in obj) {
+		obj.open_issues = obj.openIssues;
+		delete obj.openIssues;
+	}
+	if ('closedIssues' in obj) {
+		obj.closed_issues = obj.closedIssues;
+		delete obj.closedIssues;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('closedAt' in obj) {
+		obj.closed_at = obj.closedAt;
+		delete obj.closedAt;
+	}
+	if ('dueOn' in obj) {
+		obj.due_on = obj.dueOn;
+		delete obj.dueOn;
+	}
+	return obj;
+};
+

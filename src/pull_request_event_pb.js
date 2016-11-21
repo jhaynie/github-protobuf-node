@@ -11,7 +11,7 @@ var global = Function('return this')();
 
 var user_pb = require('./user_pb.js');
 var repository_pb = require('./repository_pb.js');
-var pullrequest_pb = require('./pullrequest_pb.js');
+var pull_request_pb = require('./pull_request_pb.js');
 goog.exportSymbol('proto.github.PullRequestEvent', null, global);
 
 /**
@@ -61,7 +61,7 @@ proto.github.PullRequestEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
     action: jspb.Message.getFieldWithDefault(msg, 1, ""),
     number: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    pullRequest: (f = msg.getPullRequest()) && pullrequest_pb.PullRequest.toObject(includeInstance, f),
+    pullRequest: (f = msg.getPullRequest()) && pull_request_pb.PullRequest.toObject(includeInstance, f),
     repository: (f = msg.getRepository()) && repository_pb.Repository.toObject(includeInstance, f),
     sender: (f = msg.getSender()) && user_pb.User.toObject(includeInstance, f)
   };
@@ -109,8 +109,8 @@ proto.github.PullRequestEvent.deserializeBinaryFromReader = function(msg, reader
       msg.setNumber(value);
       break;
     case 3:
-      var value = new pullrequest_pb.PullRequest;
-      reader.readMessage(value,pullrequest_pb.PullRequest.deserializeBinaryFromReader);
+      var value = new pull_request_pb.PullRequest;
+      reader.readMessage(value,pull_request_pb.PullRequest.deserializeBinaryFromReader);
       msg.setPullRequest(value);
       break;
     case 4:
@@ -180,7 +180,7 @@ proto.github.PullRequestEvent.prototype.serializeBinaryToWriter = function (writ
     writer.writeMessage(
       3,
       f,
-      pullrequest_pb.PullRequest.serializeBinaryToWriter
+      pull_request_pb.PullRequest.serializeBinaryToWriter
     );
   }
   f = this.getRepository();
@@ -238,7 +238,7 @@ proto.github.PullRequestEvent.prototype.setNumber = function(value) {
  */
 proto.github.PullRequestEvent.prototype.getPullRequest = function() {
   return /** @type{?proto.github.PullRequest} */ (
-    jspb.Message.getWrapperField(this, pullrequest_pb.PullRequest, 3));
+    jspb.Message.getWrapperField(this, pull_request_pb.PullRequest, 3));
 };
 
 
@@ -323,3 +323,60 @@ proto.github.PullRequestEvent.prototype.hasSender = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.PullRequestEvent
+proto.github.PullRequestEvent.prototype.fromJSON = function(obj) {
+	'action' in obj && this.setAction(obj.action);
+	'number' in obj && this.setNumber(+obj.number);
+	if ('pull_request' in obj) {
+		var PullRequest = require('./pull_request_pb.js').PullRequest;
+		var PullRequestInstance = new PullRequest();
+		this.setPullRequest(PullRequestInstance.fromJSON(obj.pull_request));
+	}
+	if ('repository' in obj) {
+		var Repository = require('./repository_pb.js').Repository;
+		var RepositoryInstance = new Repository();
+		this.setRepository(RepositoryInstance.fromJSON(obj.repository));
+	}
+	if ('sender' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setSender(UserInstance.fromJSON(obj.sender));
+	}
+	return this;
+};
+
+proto.github.PullRequestEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('number' in obj) {
+		obj.number = obj.number;
+		delete obj.number;
+	}
+	if ('pullRequest' in obj) {
+		obj.pull_request = this.getPullRequest().toJSON();
+	}
+	if ('repository' in obj) {
+		obj.repository = this.getRepository().toJSON();
+	}
+	if ('sender' in obj) {
+		obj.sender = this.getSender().toJSON();
+	}
+	return obj;
+};
+

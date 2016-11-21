@@ -1946,3 +1946,314 @@ proto.github.GistEvent.prototype.hasGist = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.GistChangeStatus
+proto.github.GistChangeStatus.prototype.fromJSON = function(obj) {
+	'deletions' in obj && this.setDeletions(+obj.deletions);
+	'additions' in obj && this.setAdditions(+obj.additions);
+	'total' in obj && this.setTotal(+obj.total);
+	return this;
+};
+
+proto.github.GistChangeStatus.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('deletions' in obj) {
+		obj.deletions = obj.deletions;
+		delete obj.deletions;
+	}
+	if ('additions' in obj) {
+		obj.additions = obj.additions;
+		delete obj.additions;
+	}
+	if ('total' in obj) {
+		obj.total = obj.total;
+		delete obj.total;
+	}
+	return obj;
+};
+
+
+
+// .github.GistHistory
+proto.github.GistHistory.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'version' in obj && this.setVersion(obj.version);
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	if ('change_status' in obj) {
+		var GistChangeStatus = require('./gist_event_pb.js').GistChangeStatus;
+		var GistChangeStatusInstance = new GistChangeStatus();
+		this.setChangeStatus(GistChangeStatusInstance.fromJSON(obj.change_status));
+	}
+	'committed_at' in obj && this.setCommittedAt(obj.committed_at);
+	return this;
+};
+
+proto.github.GistHistory.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('version' in obj) {
+		obj.version = obj.version;
+		delete obj.version;
+	}
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('changeStatus' in obj) {
+		obj.change_status = this.getChangeStatus().toJSON();
+	}
+	if ('committedAt' in obj) {
+		obj.committed_at = obj.committedAt;
+		delete obj.committedAt;
+	}
+	return obj;
+};
+
+
+
+// .github.Gist
+proto.github.Gist.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'forks_url' in obj && this.setForksUrl(obj.forks_url);
+	'commits_url' in obj && this.setCommitsUrl(obj.commits_url);
+	'id' in obj && this.setId(+obj.id);
+	'description' in obj && this.setDescription(obj.description);
+	'public' in obj && this.setPublic(_toBool(obj.public));
+	if ('owner' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setOwner(UserInstance.fromJSON(obj.owner));
+	}
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	if ('files' in obj) {
+		var m = this.getFilesMap();
+		Object.keys(obj.files).forEach(function(k) {
+			var GistFile = require('./gist_event_pb.js').GistFile;
+			var GistFileInstance = new GistFile();
+			var v = GistFileInstance.fromJSON(obj.files[k]));
+			m.set(k, v);
+		});
+	}
+	'truncated' in obj && this.setTruncated(_toBool(obj.truncated));
+	'comments' in obj && this.setComments(+obj.comments);
+	'comments_url' in obj && this.setCommentsUrl(obj.comments_url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'git_pull_url' in obj && this.setGitPullUrl(obj.git_pull_url);
+	'git_push_url' in obj && this.setGitPushUrl(obj.git_push_url);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	if ('forks' in obj) {
+		var GistFork = require('./gist_event_pb.js').GistFork;
+		var GistForkInstance = new GistFork();
+		this.setForks(GistForkInstance.fromJSON(obj.forks));
+	}
+	return this;
+};
+
+proto.github.Gist.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('forksUrl' in obj) {
+		obj.forks_url = obj.forksUrl;
+		delete obj.forksUrl;
+	}
+	if ('commitsUrl' in obj) {
+		obj.commits_url = obj.commitsUrl;
+		delete obj.commitsUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('public' in obj) {
+		obj.public = obj.public;
+		delete obj.public;
+	}
+	if ('owner' in obj) {
+		obj.owner = this.getOwner().toJSON();
+	}
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('filesMap' in obj) {
+		var files = this.getFilesMap();
+		obj.files = {};
+		delete obj.filesMap;
+		files.forEach(function(v, k) {
+			obj.files[k] = v;
+		});
+	}
+	if ('truncated' in obj) {
+		obj.truncated = obj.truncated;
+		delete obj.truncated;
+	}
+	if ('comments' in obj) {
+		obj.comments = obj.comments;
+		delete obj.comments;
+	}
+	if ('commentsUrl' in obj) {
+		obj.comments_url = obj.commentsUrl;
+		delete obj.commentsUrl;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('gitPullUrl' in obj) {
+		obj.git_pull_url = obj.gitPullUrl;
+		delete obj.gitPullUrl;
+	}
+	if ('gitPushUrl' in obj) {
+		obj.git_push_url = obj.gitPushUrl;
+		delete obj.gitPushUrl;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('forks' in obj) {
+		obj.forks = this.getForks().toJSON();
+	}
+	return obj;
+};
+
+
+
+// .github.GistFork
+proto.github.GistFork.prototype.fromJSON = function(obj) {
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	'url' in obj && this.setUrl(obj.url);
+	'id' in obj && this.setId(obj.id);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	return this;
+};
+
+proto.github.GistFork.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	return obj;
+};
+
+
+
+// .github.GistFile
+proto.github.GistFile.prototype.fromJSON = function(obj) {
+	'FileSize' in obj && this.setFileSize(+obj.FileSize);
+	'raw_url' in obj && this.setRawUrl(obj.raw_url);
+	'type' in obj && this.setType(obj.type);
+	'language' in obj && this.setLanguage(obj.language);
+	'truncated' in obj && this.setTruncated(_toBool(obj.truncated));
+	'content' in obj && this.setContent(obj.content);
+	return this;
+};
+
+proto.github.GistFile.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('size' in obj) {
+		obj.size = obj.size;
+		delete obj.size;
+	}
+	if ('rawUrl' in obj) {
+		obj.raw_url = obj.rawUrl;
+		delete obj.rawUrl;
+	}
+	if ('type' in obj) {
+		obj.type = obj.type;
+		delete obj.type;
+	}
+	if ('language' in obj) {
+		obj.language = obj.language;
+		delete obj.language;
+	}
+	if ('truncated' in obj) {
+		obj.truncated = obj.truncated;
+		delete obj.truncated;
+	}
+	if ('content' in obj) {
+		obj.content = obj.content;
+		delete obj.content;
+	}
+	return obj;
+};
+
+
+
+// .github.GistEvent
+proto.github.GistEvent.prototype.fromJSON = function(obj) {
+	'action' in obj && this.setAction(obj.action);
+	if ('gist' in obj) {
+		var Gist = require('./gist_event_pb.js').Gist;
+		var GistInstance = new Gist();
+		this.setGist(GistInstance.fromJSON(obj.gist));
+	}
+	return this;
+};
+
+proto.github.GistEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('action' in obj) {
+		obj.action = obj.action;
+		delete obj.action;
+	}
+	if ('gist' in obj) {
+		obj.gist = this.getGist().toJSON();
+	}
+	return obj;
+};
+

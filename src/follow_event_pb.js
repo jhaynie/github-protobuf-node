@@ -179,3 +179,34 @@ proto.github.FollowEvent.prototype.hasTarget = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.FollowEvent
+proto.github.FollowEvent.prototype.fromJSON = function(obj) {
+	if ('target' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setTarget(UserInstance.fromJSON(obj.target));
+	}
+	return this;
+};
+
+proto.github.FollowEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('target' in obj) {
+		obj.target = this.getTarget().toJSON();
+	}
+	return obj;
+};
+

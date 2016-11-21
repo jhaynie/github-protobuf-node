@@ -518,3 +518,86 @@ proto.github.DownloadEvent.prototype.hasDownload = function() {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Download
+proto.github.Download.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'id' in obj && this.setId(+obj.id);
+	'name' in obj && this.setName(obj.name);
+	'description' in obj && this.setDescription(obj.description);
+	'FileSize' in obj && this.setFileSize(+obj.FileSize);
+	'download_count' in obj && this.setDownloadCount(+obj.download_count);
+	'content_type' in obj && this.setContentType(obj.content_type);
+	return this;
+};
+
+proto.github.Download.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('name' in obj) {
+		obj.name = obj.name;
+		delete obj.name;
+	}
+	if ('description' in obj) {
+		obj.description = obj.description;
+		delete obj.description;
+	}
+	if ('size' in obj) {
+		obj.size = obj.size;
+		delete obj.size;
+	}
+	if ('downloadCount' in obj) {
+		obj.download_count = obj.downloadCount;
+		delete obj.downloadCount;
+	}
+	if ('contentType' in obj) {
+		obj.content_type = obj.contentType;
+		delete obj.contentType;
+	}
+	return obj;
+};
+
+
+
+// .github.DownloadEvent
+proto.github.DownloadEvent.prototype.fromJSON = function(obj) {
+	if ('download' in obj) {
+		var Download = require('./download_event_pb.js').Download;
+		var DownloadInstance = new Download();
+		this.setDownload(DownloadInstance.fromJSON(obj.download));
+	}
+	return this;
+};
+
+proto.github.DownloadEvent.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('download' in obj) {
+		obj.download = this.getDownload().toJSON();
+	}
+	return obj;
+};
+

@@ -449,3 +449,84 @@ proto.github.Comment.prototype.setBody = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Comment
+proto.github.Comment.prototype.fromJSON = function(obj) {
+	'url' in obj && this.setUrl(obj.url);
+	'html_url' in obj && this.setHtmlUrl(obj.html_url);
+	'id' in obj && this.setId(+obj.id);
+	if ('user' in obj) {
+		var User = require('./user_pb.js').User;
+		var UserInstance = new User();
+		this.setUser(UserInstance.fromJSON(obj.user));
+	}
+	'position' in obj && this.setPosition(+obj.position);
+	'line' in obj && this.setLine(+obj.line);
+	'path' in obj && this.setPath(obj.path);
+	'commit_id' in obj && this.setCommitId(obj.commit_id);
+	'created_at' in obj && this.setCreatedAt(obj.created_at);
+	'updated_at' in obj && this.setUpdatedAt(obj.updated_at);
+	'body' in obj && this.setBody(obj.body);
+	return this;
+};
+
+proto.github.Comment.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('url' in obj) {
+		obj.url = obj.url;
+		delete obj.url;
+	}
+	if ('htmlUrl' in obj) {
+		obj.html_url = obj.htmlUrl;
+		delete obj.htmlUrl;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('user' in obj) {
+		obj.user = this.getUser().toJSON();
+	}
+	if ('position' in obj) {
+		obj.position = obj.position;
+		delete obj.position;
+	}
+	if ('line' in obj) {
+		obj.line = obj.line;
+		delete obj.line;
+	}
+	if ('path' in obj) {
+		obj.path = obj.path;
+		delete obj.path;
+	}
+	if ('commitId' in obj) {
+		obj.commit_id = obj.commitId;
+		delete obj.commitId;
+	}
+	if ('createdAt' in obj) {
+		obj.created_at = obj.createdAt;
+		delete obj.createdAt;
+	}
+	if ('updatedAt' in obj) {
+		obj.updated_at = obj.updatedAt;
+		delete obj.updatedAt;
+	}
+	if ('body' in obj) {
+		obj.body = obj.body;
+		delete obj.body;
+	}
+	return obj;
+};
+

@@ -320,3 +320,56 @@ proto.github.Message.prototype.setContext = function(value) {
 
 
 goog.object.extend(exports, proto.github);
+
+
+// patched by github-protobuf to add toJSON and fromJSON methods
+
+function _toBool (obj) {
+	if (typeof(obj) === 'boolean') { return obj; }
+	if (typeof(obj) === 'string') { return obj === 'true'; }
+	if (typeof(obj) === 'number') { return obj > 0; }
+	return false;
+};
+
+
+
+// .github.Message
+proto.github.Message.prototype.fromJSON = function(obj) {
+	'version' in obj && this.setVersion(+obj.version);
+	'timestamp' in obj && this.setTimestamp(obj.timestamp);
+	'id' in obj && this.setId(obj.id);
+	'event' in obj && this.setEvent(obj.event);
+	'payload' in obj && this.setPayload(obj.payload);
+	'context' in obj && this.setContext(obj.context);
+	return this;
+};
+
+proto.github.Message.prototype.toJSON = function() {
+	var obj = this.toObject();
+	if ('version' in obj) {
+		obj.version = obj.version;
+		delete obj.version;
+	}
+	if ('timestamp' in obj) {
+		obj.timestamp = obj.timestamp;
+		delete obj.timestamp;
+	}
+	if ('id' in obj) {
+		obj.id = obj.id;
+		delete obj.id;
+	}
+	if ('event' in obj) {
+		obj.event = obj.event;
+		delete obj.event;
+	}
+	if ('payload' in obj) {
+		obj.payload = obj.payload;
+		delete obj.payload;
+	}
+	if ('context' in obj) {
+		obj.context = obj.context;
+		delete obj.context;
+	}
+	return obj;
+};
+
